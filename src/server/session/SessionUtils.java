@@ -2,7 +2,8 @@ package server.session;
 
 
 
-import server.cmd.Command;
+
+import network.cmd.Command;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;

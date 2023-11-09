@@ -1,7 +1,7 @@
 package server.main;
 
 
-import server.cmd.ConnectCommand;
+import network.cmd.ConnectCommand;
 import server.config.Configuration;
 import server.game.match.MatchRoom;
 import server.session.Session;

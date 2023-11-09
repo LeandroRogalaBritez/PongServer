@@ -1,4 +1,4 @@
-package server.cmd;
+package network.cmd;
 
 import java.util.Arrays;
 import java.util.List;

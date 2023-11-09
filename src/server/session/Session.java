@@ -1,7 +1,7 @@
 package server.session;
 
-import server.cmd.Command;
-import server.cmd.DisconnectCommand;
+import network.cmd.Command;
+import network.cmd.DisconnectCommand;
 import server.main.ServerMain;
 
 import java.io.ObjectInputStream;

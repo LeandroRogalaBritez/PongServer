@@ -1,4 +1,4 @@
-package server.cmd;
+package network.cmd;
 
 public enum CommandType {
 	CONNECT,
