@@ -26,6 +26,7 @@ public class Session extends Thread {
 				t.printStackTrace();
 				disconnectClient();
 				ServerMain.getSessions().remove(getThreadName());
+				ServerMain.removePlayersMatch(getThreadName());
 				SessionUtils.sendToAll(ServerMain.getSessions(), new DisconnectCommand(getThreadName()));
 			}
 		}

@@ -10,15 +10,13 @@ import server.session.SessionUtils;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerMain {
 	private static final Map<String, Session> sessions = new ConcurrentHashMap<>();
-	private static Map<String, MatchRoom> matches = new HashMap<String, MatchRoom>();
+	private static Map<String, MatchRoom> matches = new HashMap<>();
+	private static Map<String, String> matchsPlayers = new HashMap<>();
 
 	public void start() throws IOException {
 		System.out.println("Iniciando conexão");
@@ -52,6 +50,25 @@ public class ServerMain {
 	
 	public static Map<String, MatchRoom> getMatches() {
 		return matches;
+	}
+
+	public static String createNewMatch(String player) {
+		while(true) {
+			Random rand = new Random();
+			String roomId = "" + rand.nextInt(10) + rand.nextInt(10) + rand.nextInt(10);
+			if (matches.containsKey(roomId)) {
+				continue;
+			}
+			matches.put(roomId, new MatchRoom());
+			System.out.println("Criado nova sala: " + roomId);
+			matchsPlayers.put(player, roomId);
+			return roomId;
+		}
+	}
+
+	public static void removePlayersMatch(String player) {
+		matches.remove(matchsPlayers.get(player));
+		matchsPlayers.remove(player);
 	}
 
 }
