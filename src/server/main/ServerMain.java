@@ -1,9 +1,11 @@
 package server.main;
 
 
+import game.MatchRoom;
 import network.cmd.ConnectCommand;
+import network.cmd.SearchRoomFailedCommand;
+import network.cmd.SearchRoomSucessCommand;
 import server.config.Configuration;
-import server.game.match.MatchRoom;
 import server.session.Session;
 import server.session.SessionUtils;
 
@@ -35,7 +37,7 @@ public class ServerMain {
 	private void sendPlayersToClient(Socket client, String threadName) {
         SessionUtils.sendToAll(sessions, new ConnectCommand(threadName));
 		sessions.put(threadName, new Session(client, threadName));
-		SessionUtils.sendToOne(client, new ConnectCommand(getAllKeySessions()));
+		SessionUtils.sendToOne(client, new ConnectCommand(getAllKeySessions(), threadName));
 	}
 
 	private List<String> getAllKeySessions() {
@@ -59,7 +61,7 @@ public class ServerMain {
 			if (matches.containsKey(roomId)) {
 				continue;
 			}
-			matches.put(roomId, new MatchRoom());
+			matches.put(roomId, new MatchRoom(player));
 			System.out.println("Criado nova sala: " + roomId);
 			matchsPlayers.put(player, roomId);
 			return roomId;
@@ -69,6 +71,17 @@ public class ServerMain {
 	public static void removePlayersMatch(String player) {
 		matches.remove(matchsPlayers.get(player));
 		matchsPlayers.remove(player);
+	}
+
+	public static void searchMatch(Socket client, String player, String roomId) {
+		if (matches.containsKey(roomId)) {
+			MatchRoom matchRoom = matches.get(roomId);
+			matchRoom.setPlayerTwo(player);
+			SessionUtils.sendToOne(client, new SearchRoomSucessCommand(matchRoom));
+			SessionUtils.sendToOne(sessions.get(matchRoom.getPlayerOne()).getClient(), new SearchRoomSucessCommand(matchRoom));
+			return;
+		}
+		SessionUtils.sendToOne(client, new SearchRoomFailedCommand());
 	}
 
 }
